@@ -1,8 +1,8 @@
 {
-    "name": "vagrant-repository-manager-gui",
+    "name": "chess",
     "version": "0.0.1",
-    "description": "Vagrant Repository Manager GUI",
-    "author": "Thomas Johansen <thomas.johansen@accenture.com>",
+    "description": "Chess",
+    "author": "Jesper Nylend <jesper.nylend@gmail.com",
     "license": "Apache-2.0",
     "private": true,
     "main": "index.js",
@@ -22,6 +22,7 @@
         "dev-start": "concurrently \"yarn dev-server\" \"yarn dev-client\""
     },
     "dependencies": {
+        "@types/redux-logger": "^3.0.6",
         "axios": "^0.18.0",
         "lodash": "^4.17.11",
         "react": "^16.4.2",
@@ -60,7 +61,7 @@
         "postcss-loader": "^3.0.0",
         "source-map-loader": "^0.2.4",
         "style-loader": "^0.23.0",
-        "ts-loader": "^5.0.0",
+        "ts-loader": "^5.3.0",
         "tslint": "^5.11.0",
         "typescript": "^3.0.3",
         "url-loader": "^1.1.1",
