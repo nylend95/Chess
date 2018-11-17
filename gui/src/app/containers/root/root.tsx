@@ -6,7 +6,8 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { RootState } from '../../models';
 import {
-    HomeContainer
+    HomeContainer,
+    GameContainer
 } from '../';
 
 interface ComponentStateProps {
@@ -22,6 +23,7 @@ class RootContainer extends Component {
         return (
             <BrowserRouter>
                 <Switch>
+                    <Route path="/game" exact component={GameContainer} />
                     <Route path="/" exact component={HomeContainer} />
                     <Route component={HomeContainer} />
                 </Switch>
