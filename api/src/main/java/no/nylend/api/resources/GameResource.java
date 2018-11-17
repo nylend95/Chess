@@ -17,7 +17,7 @@ public class GameResource {
      * @return
      */
     @GetMapping(path = "/game")
-    public ResponseEntity<Game> getGame(){
+    public ResponseEntity<Object> getGame(){
         //Call service which contains current game
         //Return game
 
