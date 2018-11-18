@@ -5,8 +5,10 @@ import no.nylend.api.chess.pieces.*;
 import java.util.ArrayList;
 import java.util.BitSet;
 
+import static no.nylend.api.chess.Utils.indexConverter;
+
 public class Board {
-	private final static int N_SQUARES = 64;
+	public final static int N_SQUARES = 64;
 	private final static int PAWN_ID = 1;
 	private final static int KNIGHT_ID = 2;
 	private final static int BISHOP_ID = 3;
@@ -16,6 +18,8 @@ public class Board {
 
 	private final ArrayList<Piece> whitePiecesObj = new ArrayList<>();
 	private final ArrayList<Piece> blackPiecesObj = new ArrayList<>();
+
+	private King whiteKing, blackKing;
 
 	private final BitSet whitePieces = new BitSet(N_SQUARES);
 	private final BitSet blackPieces = new BitSet(N_SQUARES);
@@ -32,17 +36,19 @@ public class Board {
 	private final BitSet whiteRocks = new BitSet(N_SQUARES);
 	private final BitSet blackRocks = new BitSet(N_SQUARES);
 
-	private final BitSet whiteKing = new BitSet(N_SQUARES);
-	private final BitSet blackKing = new BitSet(N_SQUARES);
+	private final BitSet whiteKingBit = new BitSet(N_SQUARES);
+	private final BitSet blackKingBit = new BitSet(N_SQUARES);
 
 	private final BitSet whiteQueen = new BitSet(N_SQUARES);
 	private final BitSet blackQueen = new BitSet(N_SQUARES);
 
 	public Board() {
-		init();
+		reset();
 	}
 
-	private void init() {
+	private void reset() {
+		whitePiecesObj.clear();
+		blackPiecesObj.clear();
 
 		// Initialize pawns
 		for (int i = 0; i < 8; i++) {
@@ -118,21 +124,42 @@ public class Board {
 		whitePiecesObj.add(new Queen(PieceColor.WHITE, new Position(3, 7)));
 		whitePos = indexConverter(4, 7);
 		whitePieces.set(whitePos);
-		whiteKing.set(whitePos);
-		whitePiecesObj.add(new King(PieceColor.WHITE, new Position(4, 7)));
+		whiteKingBit.set(whitePos);
+		whiteKing = new King(PieceColor.WHITE, new Position(4, 7));
 		blackPos = indexConverter(3, 0);
 		blackPieces.set(blackPos);
 		blackQueen.set(blackPos);
 		blackPiecesObj.add(new Queen(PieceColor.BLACK, new Position(3, 0)));
 		blackPos = indexConverter(4, 0);
 		blackPieces.set(blackPos);
-		blackKing.set(blackPos);
-		blackPiecesObj.add(new King(PieceColor.BLACK, new Position(4, 0)));
+		blackKingBit.set(blackPos);
+		blackKing = new King(PieceColor.BLACK, new Position(4, 0));
 	}
 
+	public boolean hasPiece(Position position) {
+		BitSet allPieces = (BitSet) whitePieces.clone();
+		allPieces.or(blackPieces);
+		return allPieces.get(indexConverter(position));
+	}
 
-	private int indexConverter(int x, int y) {
-		return  y * 8 + x;
+	public Piece capturePiece(Position position) {
+		if (hasPiece(position)) {
+			//TODO improve performance
+			for (Piece black : blackPiecesObj) {
+				if (black.getPosition().equals(position))
+					return black;
+			}
+			for (Piece white : whitePiecesObj) {
+				if (white.getPosition().equals(position))
+					return white;
+			}
+		}
+		return null;
+	}
+
+	public void movePiece(Piece piece, Position newPosition) {
+		Position oldPos = piece.getPosition();
+		piece.setPosition(newPosition);
 	}
 
 	/**
@@ -142,38 +169,38 @@ public class Board {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < N_SQUARES; i++) {
-			if (blackPieces.get(i)){
+			if (blackPieces.get(i)) {
 				if (blackPawns.get(i)) {
 					sb.append(-PAWN_ID);
-				}else if (blackRocks.get(i)){
+				} else if (blackRocks.get(i)) {
 					sb.append(-ROCK_ID);
-				}else if (blackKnights.get(i)){
+				} else if (blackKnights.get(i)) {
 					sb.append(-KNIGHT_ID);
-				}else if (blackBishops.get(i)){
+				} else if (blackBishops.get(i)) {
 					sb.append(-BISHOP_ID);
-				}else if (blackQueen.get(i)){
+				} else if (blackQueen.get(i)) {
 					sb.append(-QUEEN_ID);
-				}else if (blackKing.get(i)){
+				} else if (blackKingBit.get(i)) {
 					sb.append(-KING_ID);
 				}
 			} else if (whitePieces.get(i)) {
 				if (whitePawns.get(i)) {
 					sb.append(PAWN_ID);
-				}else if (whiteRocks.get(i)){
+				} else if (whiteRocks.get(i)) {
 					sb.append(ROCK_ID);
-				}else if (whiteKnights.get(i)){
+				} else if (whiteKnights.get(i)) {
 					sb.append(KNIGHT_ID);
-				}else if (whiteBishops.get(i)){
+				} else if (whiteBishops.get(i)) {
 					sb.append(BISHOP_ID);
-				}else if (whiteQueen.get(i)){
+				} else if (whiteQueen.get(i)) {
 					sb.append(QUEEN_ID);
-				}else if (whiteKing.get(i)){
+				} else if (whiteKingBit.get(i)) {
 					sb.append(KING_ID);
 				}
 			} else
 				sb.append(0);
 			sb.append("\t");
-			if ((i + 1) % 8 == 0){
+			if ((i + 1) % 8 == 0) {
 				sb.append("\n");
 			}
 		}
@@ -181,9 +208,83 @@ public class Board {
 		return sb.toString();
 	}
 
+	public ArrayList<Piece> getWhitePiecesObj() {
+		return whitePiecesObj;
+	}
+
+	public ArrayList<Piece> getBlackPiecesObj() {
+		return blackPiecesObj;
+	}
+
+	public King getWhiteKing() {
+		return whiteKing;
+	}
+
+	public King getBlackKing() {
+		return blackKing;
+	}
+
+	public BitSet getWhitePieces() {
+		return whitePieces;
+	}
+
+	public BitSet getBlackPieces() {
+		return blackPieces;
+	}
+
+	public BitSet getWhitePawns() {
+		return whitePawns;
+	}
+
+	public BitSet getBlackPawns() {
+		return blackPawns;
+	}
+
+	public BitSet getWhiteKnights() {
+		return whiteKnights;
+	}
+
+	public BitSet getBlackKnights() {
+		return blackKnights;
+	}
+
+	public BitSet getWhiteBishops() {
+		return whiteBishops;
+	}
+
+	public BitSet getBlackBishops() {
+		return blackBishops;
+	}
+
+	public BitSet getWhiteRocks() {
+		return whiteRocks;
+	}
+
+	public BitSet getBlackRocks() {
+		return blackRocks;
+	}
+
+	public BitSet getWhiteKingBit() {
+		return whiteKingBit;
+	}
+
+	public BitSet getBlackKingBit() {
+		return blackKingBit;
+	}
+
+	public BitSet getWhiteQueen() {
+		return whiteQueen;
+	}
+
+	public BitSet getBlackQueen() {
+		return blackQueen;
+	}
+
+
 	public static void main(String[] args) {
+		// For testing
 		Board b = new Board();
-		b.init();
+		b.reset();
 		System.out.println(b);
 	}
 }

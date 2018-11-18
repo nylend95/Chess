@@ -1,8 +1,9 @@
 package no.nylend.api.chess.pieces;
 
 import no.nylend.api.chess.Position;
+import no.nylend.api.chess.Utils;
 
-import java.util.Set;
+import java.util.BitSet;
 
 public class Pawn extends Piece {
 
@@ -11,12 +12,11 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public Set<Position> getMoves() {
-		return null;
-	}
-
-	@Override
-	public Set<Position> getAttack() {
-		return null;
+	public BitSet updateMoves() {
+		moveSet.clear();
+		moveSet.set(Utils.indexConverter(position.getColumn(), Utils.maxMin(position.getRow() + color.getValue())));
+		moveSet.set(Utils.indexConverter(Utils.maxMin(position.getColumn() + 1), Utils.maxMin(position.getRow() + color.getValue())));
+		moveSet.set(Utils.indexConverter(Utils.maxMin(position.getColumn() - 1), Utils.maxMin(position.getRow() + color.getValue())));
+		return moveSet;
 	}
 }

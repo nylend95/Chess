@@ -2,7 +2,7 @@ package no.nylend.api.chess.pieces;
 
 import no.nylend.api.chess.Position;
 
-import java.util.Set;
+import java.util.BitSet;
 
 public class Knight extends Piece {
 	public Knight(PieceColor color, Position startPosition) {
@@ -10,12 +10,8 @@ public class Knight extends Piece {
 	}
 
 	@Override
-	public Set<Position> getMoves() {
-		return null;
-	}
-
-	@Override
-	public Set<Position> getAttack() {
-		return null;
+	public BitSet updateMoves() {
+		return moveSet;
+		//TODO!
 	}
 }
