@@ -1,3 +1,5 @@
+import { NewGameActionTypes } from "../constants";
+
 export interface Game {
 
 }
@@ -17,4 +19,21 @@ export interface Move {
 }
 
 
-//export interface Game...Action{...}
+export interface NewGameLoadingAction {
+    type: NewGameActionTypes.LOADING,
+    loading: boolean
+}
+
+export interface NewGameSuccessAction {
+    type: NewGameActionTypes.SUCCESS,
+    payload: Game
+}
+
+export interface NewGameErrorAction {
+    type: NewGameActionTypes.ERROR,
+    error: any
+}
+
+export type NewGameAction = NewGameLoadingAction | NewGameSuccessAction | NewGameErrorAction;
+
+export type GameAction = NewGameAction
