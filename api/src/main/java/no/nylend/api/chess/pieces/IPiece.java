@@ -1,11 +1,11 @@
 package no.nylend.api.chess.pieces;
 
-import no.nylend.api.chess.Position;
-
-import java.util.Set;
+import java.util.BitSet;
 
 public interface IPiece {
-    Set<Position> getMoves();
-
-    Set<Position> getAttack();
+	/**
+	 * Update available moves for the current piece
+	 * @return a bitmap of the pure available moves with an empty board
+	 */
+    BitSet updateMoves();
 }
