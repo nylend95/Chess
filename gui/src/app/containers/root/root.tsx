@@ -19,6 +19,8 @@ interface ComponentDispatchProps {
 
 class RootContainer extends Component {
 
+    //BrowserRouter is used to easily manipulate browser history
+    //A route is a path to a component
     public render(): ReactNode {
         return (
             <BrowserRouter>
@@ -32,12 +34,15 @@ class RootContainer extends Component {
     }
 }
 
+//Properties from redux store
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
 });
 
+//Functions to dispatch (perform action) action to redux store
 const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
 });
 
+//Connects component to redux store. 
 const ConnectedRootContainer = connect(mapStateToProps, mapDispatchToProps)(RootContainer);
 
 export { ConnectedRootContainer as RootContainer };

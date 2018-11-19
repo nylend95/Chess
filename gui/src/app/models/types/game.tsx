@@ -1,11 +1,19 @@
 import { NewGameActionTypes } from "../constants";
 
+/**
+ * Declearing different types used throughout the application
+ * related to a Game.
+ * Usually each component has one file of types related to it.
+ */
 export interface Game {
 
 }
 
+// Declearing State (redux-store)
 export interface GameState {
-    history?: History[];
+    loading: boolean,
+    game: Game,
+    error?: Error
 }
 
 export interface History {
@@ -18,7 +26,7 @@ export interface Move {
     //TODO: Create move (i.e.  e4, Qd2, Rad1, Rd1, Nf6...)
 }
 
-
+//Declearing actions
 export interface NewGameLoadingAction {
     type: NewGameActionTypes.LOADING,
     loading: boolean
@@ -34,6 +42,8 @@ export interface NewGameErrorAction {
     error: any
 }
 
+//Create a Type <T> which is either of the actions
 export type NewGameAction = NewGameLoadingAction | NewGameSuccessAction | NewGameErrorAction;
 
+//Create a Type <K> which is either of the Type <T>
 export type GameAction = NewGameAction

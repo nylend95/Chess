@@ -16,6 +16,7 @@ if (process.env.NODE_ENV === 'development') {
     middlewares.push(logger);
 }
 
+//Create initial store
 export const store = createStore<RootState>(rootReducer, initialRootState, composeWithDevTools(applyMiddleware(...middlewares)));
 
 export default store;
